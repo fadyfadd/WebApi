@@ -5,18 +5,15 @@ namespace WebApi.EntityFrameworkContext;
 
 public class SakilaDataContext : DbContext
 {
-    private String connectionString; 
-
+ 
     public DbSet<Actor> Actors {set; get;}
 
     public DbSet<ActorFilm> ActorFilms {set; get;}
 
     public DbSet<Film> Films {set; get;}
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseMySQL(connectionString);
+    public SakilaDataContext(DbContextOptions<SakilaDataContext> sakilaDataContext) : base(sakilaDataContext) {
+      
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,9 +23,4 @@ public class SakilaDataContext : DbContext
         modelBuilder.ApplyConfiguration(new ActorFilmConfiguration());
         modelBuilder.ApplyConfiguration(new FilmConfiguration());
     }
-
-    public SakilaDataContext(String connectionString) {
-        this.connectionString = connectionString;
-    }
-
 }

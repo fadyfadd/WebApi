@@ -1,7 +1,21 @@
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WebApi;
+using WebApi.EntityFrameworkContext;
+using WebApi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+var appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>(); 
+builder.Services.AddDbContext<SakilaDataContext>((options)=>options.UseMySQL(appSettings.SakilaConnectionString));
+builder.Services.AddOptions();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<ActorService>();
 
 var app = builder.Build();
 
@@ -9,34 +23,16 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/sakila-actors", (HttpContext context , IOptions<AppSettings> settings , ActorService actorService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    var actors =  actorService.GetActors(); 
+    return actors; 
 })
-.WithName("GetWeatherForecast")
+.WithName("GetSakilaActors")
 .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
