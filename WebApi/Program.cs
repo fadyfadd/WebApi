@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WebApi;
 using WebApi.EntityFrameworkContext;
 using WebApi.Services;
+using AutoMapper;
+using Infrastructure.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 var appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSettings>(); 
 builder.Services.AddDbContext<SakilaDataContext>((options)=>options.UseMySQL(appSettings.SakilaConnectionString));
