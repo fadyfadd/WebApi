@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Utilities;
 using WebApi.EntityFrameworkContext;
 
 namespace WebApi.Services;
@@ -10,7 +11,7 @@ public class ActorService
         this.sakilaDataContext = sakilaDataContext; 
     }
 
-    public List<Actor> GetActors() {
-        return sakilaDataContext.Actors.ToList();
+    public List<Actor> GetSakilaMoviesByActor(Int32 actorId) {
+        return sakilaDataContext.Actors.Include(f=>f.ActorFilms).ThenInclude(f=>f.Film).Where(a=>a.ActorId == actorId).ToList();
     }
 }

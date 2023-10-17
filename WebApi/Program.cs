@@ -6,6 +6,8 @@ using WebApi.EntityFrameworkContext;
 using WebApi.Services;
 using AutoMapper;
 using Infrastructure.WebApi;
+using WebApi.DataTransferObjects;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,12 +32,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/sakila-actors", (HttpContext context , IOptions<AppSettings> settings , ActorService actorService) =>
+app.MapGet("/sakila-movies-by-actor/{actorId}", (HttpContext context , IOptions<AppSettings> settings , ActorService actorService , IMapper mapper , [FromQuery()] Int32  actorId) =>
 {
-    var actors =  actorService.GetActors(); 
-    return actors; 
+
+    var actors =  actorService.GetSakilaMoviesByActor(actorId);
+    var result =  mapper.Map<List<ActorDto>>(actors);
+    return result; 
 })
-.WithName("GetSakilaActors")
+.WithName("GetSakilaMoviesByActor")
 .WithOpenApi();
 
 app.Run();
