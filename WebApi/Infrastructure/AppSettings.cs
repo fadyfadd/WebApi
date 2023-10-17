@@ -1,4 +1,4 @@
-﻿namespace WebApi;
+﻿namespace Infrastructure.WebApi;
 
 public class AppSettings
 {
