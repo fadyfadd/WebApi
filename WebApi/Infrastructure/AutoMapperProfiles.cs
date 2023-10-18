@@ -7,7 +7,7 @@ public class AutoMapperProfiles : Profile
 {
     public AutoMapperProfiles() {
       
-        CreateMap<Actor , ActorDto>().ForMember(a=>a.FilmDtos , opt=>opt.MapFrom(b=>b.ActorFilms)).ReverseMap();
+        CreateMap<Actor , ActorDto>().ForMember(a=>a.FilmDtos , opt=>opt.MapFrom(b=>b.ActorFilms));
         
         CreateMap<ActorFilm, FilmDto>()
         .ForMember(a=>a.Title , opt=>opt.MapFrom(b=>b.Film.Title))
