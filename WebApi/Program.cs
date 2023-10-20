@@ -65,6 +65,6 @@ app.MapGet("/sakila-movies-by-actor/{actorId}", (HttpContext context, IOptions<A
 })
 .WithName("GetSakilaMoviesByActor").RequireAuthorization("sakila-movies-by-actor")
 .WithOpenApi();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
 app.Run();

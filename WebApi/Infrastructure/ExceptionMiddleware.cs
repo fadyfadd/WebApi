@@ -26,21 +26,34 @@ public class ExceptionMiddleware
         {
             ApiException response = null;
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
 
             if (env.IsDevelopment())
             {
+
                 if (ex is ApplicationError)
-                    response = new ApiException(context.Response.StatusCode, ex.Message);
-                else
-                    response = new ApiException(context.Response.StatusCode, ex.ToString());
+                {
+                    response = new ApiException(context.Response.StatusCode, ex.Message , "");
+                    context.Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                }
+
+                else {
+                    response = new ApiException(context.Response.StatusCode, ex.Message , ex.ToString());
+                    context.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                }
+                   
             }
             else
             {
-                if (ex is ApplicationError)
-                    response = new ApiException(context.Response.StatusCode, ex.Message);
-                else
-                    response = new ApiException(context.Response.StatusCode, "Internal Server Error");
+                if (ex is ApplicationError) {
+                    response = new ApiException(context.Response.StatusCode, ex.Message , "");
+                    context.Response.StatusCode = (int)System.Net.HttpStatusCode.BadRequest;
+                }
+
+                else {
+                    context.Response.StatusCode = (int)System.Net.HttpStatusCode.InternalServerError;
+                    response = new ApiException(context.Response.StatusCode, "Internal Server Error" , "");
+                }
+                  
             }
             var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
             var json = JsonSerializer.Serialize(response, options);
