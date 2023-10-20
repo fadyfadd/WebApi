@@ -17,7 +17,7 @@ public class JwtTokenServices : IJwtTokenServices
         this.jwtTokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Value.JwtToken));
     }
 
-       public JwtTokenServices(AppSettings settings)
+    public JwtTokenServices(AppSettings settings)
     {
         this.jwtTokenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.JwtToken));
     }

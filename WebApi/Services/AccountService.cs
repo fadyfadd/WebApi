@@ -1,14 +1,13 @@
-﻿using Infrastructure.WebApi;
-using Org.BouncyCastle.Asn1.Cms;
-using WebApi;
+﻿using WebApi;
 using WebApi.DataTransferObjects;
+using WebApi.EntityFrameworkContext;
 
 namespace Services.WebApi;
 
 public class AccountService
 {
     private IJwtTokenServices tokenServices;
-    public AccountService(IJwtTokenServices tokenServices) {
+    public AccountService(IJwtTokenServices tokenServices , SakilaDataContext sakilaDataContext) {
         this.tokenServices = tokenServices;
     }
 

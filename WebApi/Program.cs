@@ -21,10 +21,11 @@ var appSettings = builder.Configuration.GetSection("AppSettings").Get<AppSetting
 builder.Services.AddDbContext<SakilaDataContext>((options) => options.UseMySQL(appSettings.SakilaConnectionString));
 builder.Services.AddScoped<IJwtTokenServices>((sp) => new JwtTokenServices(appSettings));
 builder.Services.AddScoped<AccountService>();
-builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ActorService>();
 builder.Services.AddOptions();
+
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) .AddJwtBearer(options =>
      {
@@ -54,7 +55,7 @@ app.UseHttpsRedirection();
 
 app.MapPost("/authenticate-user", (HttpContext context, IOptions<AppSettings> settings , [FromBody] LoginDto user , AccountService accountService) => { 
     return accountService.AuthenticatedUser(user);
-});
+}).WithName("AuthenticateUser");
 
 app.MapGet("/sakila-movies-by-actor/{actorId}", (HttpContext context, IOptions<AppSettings> settings, ActorService actorService, IMapper mapper, [FromQuery()] Int32 actorId) =>
 {
