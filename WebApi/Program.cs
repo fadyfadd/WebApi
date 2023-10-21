@@ -26,6 +26,8 @@ builder.Services.AddScoped<ActorService>();
 builder.Services.AddOptions();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddCors();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme) .AddJwtBearer(options =>
      {
@@ -57,7 +59,7 @@ app.MapPost("/authenticate-user", (HttpContext context, IOptions<AppSettings> se
     return accountService.AuthenticatedUser(user);
 }).WithName("AuthenticateUser");
 
-app.MapGet("/sakila-movies-by-actor/{actorId}", (HttpContext context, IOptions<AppSettings> settings, ActorService actorService, IMapper mapper, [FromQuery()] Int32 actorId) =>
+app.MapGet("/sakila-movies-by-actor/{actorId}", (HttpContext context, IOptions<AppSettings> settings, ActorService actorService, IMapper mapper, [FromRoute()] Int32 actorId) =>
 {
     var actors = actorService.GetSakilaMoviesByActor(actorId);
     var result = mapper.Map<List<ActorDto>>(actors);
@@ -65,6 +67,8 @@ app.MapGet("/sakila-movies-by-actor/{actorId}", (HttpContext context, IOptions<A
 })
 .WithName("GetSakilaMoviesByActor").RequireAuthorization("sakila-movies-by-actor")
 .WithOpenApi();
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseAuthorization();
+
 app.Run();
