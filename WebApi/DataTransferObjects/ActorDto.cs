@@ -8,6 +8,6 @@ public class ActorDto
     public String FirstName {set; get;}
     public String LastName {set; get;}
     public DateTime LastUpdate {set; get;}
-    public ICollection<FilmDto> FilmDtos {set; get;} 
+    public ICollection<FilmDto> FilmsDto {set; get;} 
 
 }

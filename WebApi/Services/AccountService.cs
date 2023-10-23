@@ -32,7 +32,7 @@ public class AccountService
         }
         else
         {
-            throw new ApplicationError("User authentication failed , please try with different credentials");
+            throw new ApplicationError("User Authentication Failed");
         }
 
 

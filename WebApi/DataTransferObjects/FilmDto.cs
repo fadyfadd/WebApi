@@ -20,5 +20,5 @@ public class FilmDto
     public String Rating { set; get; }
     public String SpecialFeatures {set; get;}
     public DateTime LastUpdate { set; get; }
-    public ICollection<ActorDto> ActorsDtos {set; get;} = null; 
+    public ICollection<ActorDto> ActorsDto {set; get;} = null; 
 }
